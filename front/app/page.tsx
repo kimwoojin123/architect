@@ -3,7 +3,7 @@
 import { useState, useEffect} from 'react'
 
 export default function Home() {
-  const [message, setMessage] = useState('')
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -11,12 +11,12 @@ export default function Home() {
 
   async function fetchData() {
     try {
-      const response = await fetch('http://127.0.0.1:8000');
+      const response = await fetch('http://127.0.0.1:8000/users');
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
       const data = await response.json();
-      setMessage(data.message);
+      setUsers(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -24,7 +24,12 @@ export default function Home() {
 
   return (
     <div>
-      <p>{message}</p>
+      {users.map((user, index) => (
+        <div key={index}>
+          <p>Name: {user.name}</p>
+          <p>Username: {user.username}</p>
+        </div>
+      ))}
     </div>
   );
 }
